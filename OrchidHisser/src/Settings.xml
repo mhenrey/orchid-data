@@ -1,0 +1,20 @@
+<SchoolSettings>
+	<ScoreSources>
+		<ScoreSource>
+			<Path>”ScoreSources/Fraser2015”</Path>
+		</ScoreSource>
+	</ScoreSources>
+	<GeoSources>
+		<GeoSource>
+			<Path>”GeoSources/surrey_elementary”</Path>
+			<District>Surrey</District>
+		</GeoSource
+		<GeoSource>
+			<Path>”GeoSources/vancouver_elementary”</Path>
+			<District>Vancouver</District>
+		</GeoSource
+	</GeoSources>
+</SchoolSettings>
+
+<PollutionSettings>
+</PollutionSettings>
