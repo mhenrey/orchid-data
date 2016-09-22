@@ -3,11 +3,18 @@ import java.io.File;
 import settings.MapSettings;
 import settings.MapSettingsFactory;
 
+//Import log4j classes.
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 public class OrchidHisser {
 
+	// Define a static logger variable so that it references the
+    // Logger instance named "OrchidHisser".
+    private static final Logger logger = LogManager.getLogger(OrchidHisser.class);
+    
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println("Hello world");
+        logger.trace("Entering application.");
 
 		File file = new File("src/Settings.xml");
 
@@ -15,7 +22,7 @@ public class OrchidHisser {
 		try {
 			mapSettings = MapSettingsFactory.FromFile(file);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+	        logger.trace("Unable to load map settings.");
 			e.printStackTrace();
 		}
 		DownloadMapSources();
@@ -26,22 +33,22 @@ public class OrchidHisser {
 
 	// Download maps from online
 	public static void DownloadMapSources(){
-		// TODO
+        logger.trace("Downloading map sources.");
 	}
 
 	// Merge map sources into one file
 	public static void ConcatenateMapSources(){
-		// TODO
+        logger.trace("Concatenating map sources.");
 	}
 
 	// make tiles from dataset
 	public static void MakeTiles(){
-		// TODO
-	}
+        logger.trace("Generating tiles.");
+    }
 
 	// correlate school scores with the schools
 	public static void CorrelateScoresWithSchools(){
-		// TODO
+        logger.trace("Correlating data.");
 	}
 
 }

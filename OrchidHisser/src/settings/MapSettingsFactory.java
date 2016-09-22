@@ -18,8 +18,8 @@ import org.xml.sax.SAXException;
 public class MapSettingsFactory {
 
 	/**
-	 * @param file
-	 * @return
+	 * @param file path to the map settings file
+	 * @return settings class containing information to decribe the map
 	 * @throws Exception 
 	 */
 	public static MapSettings FromFile(File file) throws Exception {
