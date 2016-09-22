@@ -25,8 +25,8 @@ public class SchoolSettingsFactory {
 	public static SchoolSettings fromElement(Element schoolSettingsElement) throws Exception {
 		SchoolSettings schoolSettings = new SchoolSettings();
 		
-		NodeList geoSourcesNList = schoolSettingsElement.getElementsByTagName("geoSources");
-		if (geoSourcesNList.getLength() > 1){
+		NodeList geoSourcesNList = schoolSettingsElement.getElementsByTagName("GeoSources");
+		if (geoSourcesNList.getLength() != 1){
 			String msg = "Expecting 1 geo sources.";
 			logger.error(msg);
 			throw new Exception(msg);
@@ -36,8 +36,8 @@ public class SchoolSettingsFactory {
 
 		schoolSettings.geoSources = GeoSourcesFactory.fromElement(geoSourcesElement);
 		
-		NodeList scoreSourcesNList = schoolSettingsElement.getElementsByTagName("scoreSources");
-		if (scoreSourcesNList.getLength() > 1){
+		NodeList scoreSourcesNList = schoolSettingsElement.getElementsByTagName("ScoreSources");
+		if (scoreSourcesNList.getLength() != 1){
 			String msg = "Expecting 1 score sources.";
 			logger.error(msg);
 			throw new Exception(msg);

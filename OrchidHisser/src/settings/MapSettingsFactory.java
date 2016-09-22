@@ -50,7 +50,7 @@ public class MapSettingsFactory {
 		MapSettings mapSettings = new MapSettings();
 
 		NodeList schoolSettingsNList = doc.getElementsByTagName("SchoolSettings");
-		if (schoolSettingsNList.getLength() > 1){
+		if (schoolSettingsNList.getLength() != 1){
 			String msg = "Expecting 1 school settings.";
 			logger.error(msg);
 			throw new Exception(msg);
