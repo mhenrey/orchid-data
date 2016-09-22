@@ -8,7 +8,7 @@
 		<GeoSource>
 			<Path>”GeoSources/surrey_elementary”</Path>
 			<District>Surrey</District>
-		</GeoSource
+		</GeoSource>
 		<GeoSource>
 			<Path>”GeoSources/vancouver_elementary”</Path>
 			<District>Vancouver</District>
