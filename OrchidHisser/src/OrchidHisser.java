@@ -8,7 +8,12 @@ public class OrchidHisser {
 
 		File file = new File("src/Settings.xml");
 
-		MapSettings settings = MapSettings.FromFile(file);
+		try {
+			MapSettings settings = MapSettingsFactory.FromFile(file);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		DownloadMapSources();
 		ConcatenateMapSources();
 		MakeTiles();
