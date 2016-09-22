@@ -13,9 +13,9 @@ import org.w3c.dom.NodeList;
  * @author mike
  *
  */
-public class SchoolSettingsFactory {
+public class SchoolSettingsFactory extends SettingsFactory {
 
-	private static final Logger logger = LogManager.getLogger(SchoolSettingsFactory.class);
+//	private static final Logger logger = LogManager.getLogger(SchoolSettingsFactory.class);
 
 	/**
 	 * @param schoolSettingsNode
@@ -25,29 +25,12 @@ public class SchoolSettingsFactory {
 	public static SchoolSettings fromElement(Element schoolSettingsElement) throws Exception {
 		SchoolSettings schoolSettings = new SchoolSettings();
 		
-		NodeList geoSourcesNList = schoolSettingsElement.getElementsByTagName("GeoSources");
-		if (geoSourcesNList.getLength() != 1){
-			String msg = "Expecting 1 geo sources.";
-			logger.error(msg);
-			throw new Exception(msg);
-		}
-		Node geoSourcesNode = geoSourcesNList.item(0);
-		Element geoSourcesElement = (Element) geoSourcesNode;				
-
+		Element geoSourcesElement = getSingleElement(schoolSettingsElement, "GeoSources");
 		schoolSettings.geoSources = GeoSourcesFactory.fromElement(geoSourcesElement);
 		
-		NodeList scoreSourcesNList = schoolSettingsElement.getElementsByTagName("ScoreSources");
-		if (scoreSourcesNList.getLength() != 1){
-			String msg = "Expecting 1 score sources.";
-			logger.error(msg);
-			throw new Exception(msg);
-		}
-		Node scoreSourcesNode = scoreSourcesNList.item(0);
-		Element scoreSourcesElement = (Element) scoreSourcesNode;
-		
+		Element scoreSourcesElement = getSingleElement(schoolSettingsElement, "ScoreSources");		
 		schoolSettings.scoreSources = ScoreSourcesFactory.fromElement(scoreSourcesElement);
-		
-		
+				
 		return schoolSettings;
 	}
 
