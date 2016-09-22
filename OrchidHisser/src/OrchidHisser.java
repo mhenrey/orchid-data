@@ -6,7 +6,7 @@ public class OrchidHisser {
 		// TODO Auto-generated method stub
 		System.out.println("Hello world");
 
-		File file = new File("Settings.xml");
+		File file = new File("src/Settings.xml");
 
 		MapSettings settings = MapSettings.FromFile(file);
 		DownloadMapSources();
