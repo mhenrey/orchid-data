@@ -3,21 +3,19 @@
  */
 package settings;
 
-import java.util.List;
-
 import org.w3c.dom.Element;
 
 /**
  * @author mike
  *
  */
-public class ScoreSourcesFactory {
+public class DistrictFactory {
 
 	/**
-	 * @param scoreSourcesElement
+	 * @param districtElement
 	 * @return
 	 */
-	public static List<ScoreSource> fromElement(Element scoreSourcesElement) {
+	public static District fromElement(Element districtElement) {
 		// TODO Auto-generated method stub
 		return null;
 	}

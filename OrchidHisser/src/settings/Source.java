@@ -10,5 +10,5 @@ import java.io.File;
  *
  */
 public class Source {
-	File filePath;
+	File path;
 }

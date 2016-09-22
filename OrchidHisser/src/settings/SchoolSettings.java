@@ -1,10 +1,11 @@
 package settings;
 import java.util.Arrays;
+import java.util.List;
 
 public class SchoolSettings {
 
-	public ScoreSource[] scoreSources;
-	public GeoSource[] geoSources;
+	public List<ScoreSource> scoreSources;
+	public List<GeoSource> geoSources;
 		
 	public SchoolSettings(){
 	}
@@ -14,8 +15,8 @@ public class SchoolSettings {
 	 */
 	@Override
 	public String toString() {
-		return "SchoolSettings [scoreSources=" + Arrays.toString(scoreSources) + ", geoSource="
-				+ Arrays.toString(geoSources) + "]";
+		return "SchoolSettings [scoreSources=" + (scoreSources.toString()) + ", geoSource="
+				+ (geoSources.toString()) + "]";
 	}
 }
 

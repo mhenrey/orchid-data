@@ -3,7 +3,7 @@
  */
 package settings;
 
-import java.util.List;
+import java.io.File;
 
 import org.w3c.dom.Element;
 
@@ -11,13 +11,13 @@ import org.w3c.dom.Element;
  * @author mike
  *
  */
-public class ScoreSourcesFactory {
+public class PathFactory {
 
 	/**
-	 * @param scoreSourcesElement
+	 * @param pathElement
 	 * @return
 	 */
-	public static List<ScoreSource> fromElement(Element scoreSourcesElement) {
+	public static File fromElement(Element pathElement) {
 		// TODO Auto-generated method stub
 		return null;
 	}
