@@ -8,7 +8,7 @@ public class OrchidHisser {
 
 		File file = new File("Settings.xml");
 
-		MapSettings settings = MapSettings.LoadMapSettings(file);
+		MapSettings settings = MapSettings.FromFile(file);
 		DownloadMapSources();
 		ConcatenateMapSources();
 		MakeTiles();
