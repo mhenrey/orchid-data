@@ -7,6 +7,6 @@ package settings;
  * @author mike
  *
  */
-public class GeoSource {
-
+public class GeoSource extends Source {
+	District district;
 }

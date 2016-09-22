@@ -1,4 +1,8 @@
 package settings;
+
+import java.io.File;
+import java.util.List;
+
 /**
  * 
  */
@@ -7,6 +11,7 @@ package settings;
  * @author mike
  *
  */
-public class ScoreSource {
+public class ScoreSource extends Source {
 
+	List<District> districts;
 }
