@@ -1,5 +1,8 @@
 import java.io.File;
 
+import settings.MapSettings;
+import settings.MapSettingsFactory;
+
 public class OrchidHisser {
 
 	public static void main(String[] args) {
@@ -8,8 +11,9 @@ public class OrchidHisser {
 
 		File file = new File("src/Settings.xml");
 
+		MapSettings mapSettings = null;
 		try {
-			MapSettings settings = MapSettingsFactory.FromFile(file);
+			mapSettings = MapSettingsFactory.FromFile(file);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
