@@ -1,12 +1,10 @@
 package settings;
 import java.util.Arrays;
 
-import org.w3c.dom.Node;
-
 public class SchoolSettings {
 
 	public ScoreSource[] scoreSources;
-	public GeoSource[] geoSource;
+	public GeoSource[] geoSources;
 		
 	public SchoolSettings(){
 	}
@@ -17,7 +15,7 @@ public class SchoolSettings {
 	@Override
 	public String toString() {
 		return "SchoolSettings [scoreSources=" + Arrays.toString(scoreSources) + ", geoSource="
-				+ Arrays.toString(geoSource) + "]";
+				+ Arrays.toString(geoSources) + "]";
 	}
 }
 
