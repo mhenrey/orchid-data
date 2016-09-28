@@ -1,17 +1,18 @@
 package settings;
+
 public class MapSettings {
 
 	SchoolSettings schoolSettings;
 	PollutionSettings pollutionSettings;
-	
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "MapSettings [schoolSettings=" + schoolSettings + ", pollutionSettings=" + pollutionSettings + "]";
+		return "MapSettings [schoolSettings=" + schoolSettings.toString() + ", pollutionSettings=" + pollutionSettings.toString() + "]";
 	}
-	
-	
+
 }

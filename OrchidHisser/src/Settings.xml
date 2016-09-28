@@ -2,6 +2,10 @@
 	<ScoreSources>
 		<ScoreSource>
 			<Path>”ScoreSources/Fraser2015”</Path>
+			<Districts>
+				<District>Surrey</District>
+				<District>Vancouver</District>
+			</Districts>
 		</ScoreSource>
 	</ScoreSources>
 	<GeoSources>

@@ -1,4 +1,5 @@
 package settings;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -21,15 +22,15 @@ import org.xml.sax.SAXException;
 public class MapSettingsFactory {
 
 	private static final Logger logger = LogManager.getLogger(MapSettingsFactory.class);
-	
+
 	/**
-	 * @param file path to the map settings file
+	 * @param file
+	 *            path to the map settings file
 	 * @return settings class containing information to decribe the map
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static MapSettings FromFile(File file) throws Exception {
-		
-		
+
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = null;
 		try {
@@ -45,21 +46,23 @@ public class MapSettingsFactory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        doc.getDocumentElement().normalize();
+		doc.getDocumentElement().normalize();
 
 		MapSettings mapSettings = new MapSettings();
 
 		NodeList schoolSettingsNList = doc.getElementsByTagName("SchoolSettings");
-		if (schoolSettingsNList.getLength() != 1){
+		if (schoolSettingsNList.getLength() != 1) {
 			String msg = "Expecting 1 school settings.";
 			logger.error(msg);
 			throw new Exception(msg);
 		}
 		Node schoolSettingsNode = schoolSettingsNList.item(0);
 		Element schoolSettingsElement = (Element) schoolSettingsNode;
-		
+
 		mapSettings.schoolSettings = SchoolSettingsFactory.fromElement(schoolSettingsElement);
-				
+		
+		logger.trace("Returning map settings:", mapSettings.toString());
+
 		return mapSettings;
 	}
 }

@@ -10,7 +10,15 @@ import java.util.List;
  *
  */
 public class School {
-	int rank;
+	double rank;
 	String name;
 	List<Coordinate> coordinates;
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "School [rank=" + rank + ", name=" + name + ", coordinates=" + coordinates.toString() + "]";
+	}
+	
 }
