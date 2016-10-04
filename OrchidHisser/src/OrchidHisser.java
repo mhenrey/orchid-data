@@ -10,6 +10,9 @@ import settings.ScoreSource;
 
 //Import log4j classes.
 import org.apache.logging.log4j.Logger;
+
+import geoData.SchoolJSON;
+
 import org.apache.logging.log4j.LogManager;
 
 public class OrchidHisser {
@@ -80,7 +83,8 @@ public class OrchidHisser {
 		logger.trace("Concatenating map sources.");
 		
 		// for each school in the school list, load into classes
-		
+		SchoolJSON school = new SchoolJSON();
+		school.FromSettings(mapSettings.getSchoolSettings());
 	}
 
 	// make tiles from dataset
