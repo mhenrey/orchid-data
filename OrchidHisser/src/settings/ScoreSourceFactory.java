@@ -21,15 +21,19 @@ public class ScoreSourceFactory extends SettingsFactory {
 	 */
 	public static ScoreSource fromElement(Element scoreSourceElement) throws Exception {
 
-		ScoreSource scoreSource = new ScoreSource();
+
 
 		Element pathElement = getSingleElement(scoreSourceElement, "Path");
-		scoreSource.path = PathFactory.fromElement(pathElement);
+		ScoreSource scoreSource = new ScoreSource(PathFactory.fromElement(pathElement));
+		
+		Element districtsElement = getSingleElement(scoreSourceElement, "Districts");
 
-		List<Element> districtElements = getElementList(scoreSourceElement, "Districts");
+		List<Element> districtElements = getElementList(districtsElement, "District");
 
-		for (Element districtElement : districtElements) {
-			scoreSource.districts.add(DistrictFactory.fromElement(districtElement));
+		for (Element districtElement : districtElements) { 
+			String districtName = getStringValue("District", districtsElement);
+			scoreSource.districtNames.add(districtName);
+			
 		}
 
 		return scoreSource;

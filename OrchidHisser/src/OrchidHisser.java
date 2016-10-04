@@ -1,7 +1,12 @@
 import java.io.File;
+import java.util.ArrayList;
 
+import settings.GeoSource;
 import settings.MapSettings;
 import settings.MapSettingsFactory;
+import settings.PollutionSettings;
+import settings.SchoolSettings;
+import settings.ScoreSource;
 
 //Import log4j classes.
 import org.apache.logging.log4j.Logger;
@@ -16,19 +21,53 @@ public class OrchidHisser {
 	public static void main(String[] args) {
 		logger.trace("Entering application.");
 
-		File file = new File("src/Settings.xml");
-
-		MapSettings mapSettings = null;
-		try {
-			mapSettings = MapSettingsFactory.FromFile(file);
-		} catch (Exception e) {
-			logger.trace("Unable to load map settings.");
-			e.printStackTrace();
-		}
+		boolean startupMode = false;
+		MapSettings mapSettings = LoadSettings(startupMode);
+		
 		DownloadMapSources();
-		ConcatenateMapSources();
+		ConcatenateMapSources(mapSettings);
 		MakeTiles();
 		CorrelateScoresWithSchools();
+	}
+
+	/**
+	 * @param startupMode
+	 */
+	private static MapSettings LoadSettings(boolean startupMode) {
+		MapSettings mapSettings = null;
+		if (startupMode) {
+			File file = new File("src/Settings.xml");
+			try {
+				mapSettings = MapSettingsFactory.FromFile(file);
+			} catch (Exception e) {
+				logger.trace("Unable to load map settings.");
+				e.printStackTrace();
+			}
+		}
+		else{
+			mapSettings = new MapSettings();
+		
+			PollutionSettings pollutionSettings = new PollutionSettings();
+			SchoolSettings schoolSettings = new SchoolSettings();
+		
+			ArrayList<GeoSource> geoSources = new ArrayList<GeoSource>();
+			ArrayList<ScoreSource> scoreSources = new ArrayList<ScoreSource>();
+			
+			geoSources.add(new GeoSource("Surrey", new File("GeoSources/surrey_elementary")));
+			geoSources.add(new GeoSource("Vancouver", new File("GeoSources/vancouver_elementary")));
+			schoolSettings.setGeoSources(geoSources);
+		
+			ArrayList<String> scoreSourceDistrictNames = new ArrayList<String>();
+			scoreSourceDistrictNames.add("Surrey");
+			scoreSourceDistrictNames.add("Vancouver");
+			scoreSources.add(new ScoreSource(scoreSourceDistrictNames, new File("ScoreSources/Fraser2015")));
+			
+			schoolSettings.setScoreSources(scoreSources);
+			
+			mapSettings.setPollutionSettings(pollutionSettings);
+			mapSettings.setSchoolSettings(schoolSettings);
+		}
+		return mapSettings;
 	}
 
 	// Download maps from online
@@ -37,8 +76,11 @@ public class OrchidHisser {
 	}
 
 	// Merge map sources into one file
-	public static void ConcatenateMapSources() {
+	public static void ConcatenateMapSources(MapSettings mapSettings) {
 		logger.trace("Concatenating map sources.");
+		
+		// for each school in the school list, load into classes
+		
 	}
 
 	// make tiles from dataset

@@ -26,7 +26,7 @@ public class MapSettingsFactory {
 	/**
 	 * @param file
 	 *            path to the map settings file
-	 * @return settings class containing information to decribe the map
+	 * @return settings class containing information to describe the map
 	 * @throws Exception
 	 */
 	public static MapSettings FromFile(File file) throws Exception {
@@ -36,19 +36,17 @@ public class MapSettingsFactory {
 		try {
 			dBuilder = dbFactory.newDocumentBuilder();
 		} catch (ParserConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.error(e1.getStackTrace().toString());
 		}
 		Document doc = null;
 		try {
 			doc = dBuilder.parse(file);
 		} catch (SAXException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getStackTrace().toString());
 		}
 		doc.getDocumentElement().normalize();
 
-		MapSettings mapSettings = new MapSettings();
+		MapSettings mapSettings = new MapSettings(file);
 
 		NodeList schoolSettingsNList = doc.getElementsByTagName("SchoolSettings");
 		if (schoolSettingsNList.getLength() != 1) {
@@ -60,7 +58,7 @@ public class MapSettingsFactory {
 		Element schoolSettingsElement = (Element) schoolSettingsNode;
 
 		mapSettings.schoolSettings = SchoolSettingsFactory.fromElement(schoolSettingsElement);
-		
+
 		logger.trace("Returning map settings:", mapSettings.toString());
 
 		return mapSettings;

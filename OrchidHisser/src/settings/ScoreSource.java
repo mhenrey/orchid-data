@@ -1,6 +1,7 @@
 package settings;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,14 +14,30 @@ import java.util.List;
  */
 public class ScoreSource extends Source {
 
-	List<District> districts;
+	List<String> districtNames;
+
+	/**
+	 * @param districts
+	 */
+	public ScoreSource(File path) {
+		super(path);
+		districtNames = new ArrayList<String>();
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "ScoreSource [districts=" + districts.toString() + "]";
+		return "ScoreSource contains: " + districtNames.size() + " districts.";
+	}
+
+	/**
+	 * @param districtNames
+	 */
+	public ScoreSource(List<String> districtNames, File path) {
+		super(path);
+		this.districtNames = districtNames;
 	}
 	
 }

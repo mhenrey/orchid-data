@@ -20,6 +20,18 @@ public abstract class SettingsFactory {
 
 	protected static final Logger logger = LogManager.getLogger(SettingsFactory.class);
 
+	protected static String getStringValue(String tagName, Element element) {
+        NodeList list = element.getElementsByTagName(tagName);
+        if (list != null && list.getLength() > 0) {
+            NodeList subList = list.item(0).getChildNodes();
+
+            if (subList != null && subList.getLength() > 0) {
+                return subList.item(0).getNodeValue();
+            }
+        }
+        return null;
+    }
+	
 	protected static Element getSingleElement(Element rootElement, String elementName) throws Exception {
 
 		NodeList nList = rootElement.getElementsByTagName(elementName);

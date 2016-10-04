@@ -18,13 +18,12 @@ public class GeoSourceFactory extends SettingsFactory {
 	 */
 	public static GeoSource fromElement(Element geoSourceElement) throws Exception {
 
-		GeoSource geoSource = new GeoSource();
+
 
 		Element pathElement = getSingleElement(geoSourceElement, "Path");
-		geoSource.path = PathFactory.fromElement(pathElement);
-
-		Element districtElement = getSingleElement(geoSourceElement, "District");
-		geoSource.district = DistrictFactory.fromElement(districtElement);
+		GeoSource geoSource = new GeoSource(PathFactory.fromElement(pathElement));
+		
+		geoSource.districtName = getStringValue("District", geoSourceElement);
 
 		return geoSource;
 	}
