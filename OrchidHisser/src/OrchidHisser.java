@@ -1,5 +1,7 @@
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import settings.GeoSource;
 import settings.MapSettings;
@@ -11,7 +13,10 @@ import settings.ScoreSource;
 //Import log4j classes.
 import org.apache.logging.log4j.Logger;
 
+import com.fasterxml.jackson.core.JsonParseException;
+
 import geoData.SchoolJSON;
+import geoData.SchoolJSONFactory;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -21,7 +26,7 @@ public class OrchidHisser {
 	// Logger instance named "OrchidHisser".
 	private static final Logger logger = LogManager.getLogger(OrchidHisser.class);
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JsonParseException, IOException {
 		logger.trace("Entering application.");
 
 		boolean startupMode = false;
@@ -56,8 +61,8 @@ public class OrchidHisser {
 			ArrayList<GeoSource> geoSources = new ArrayList<GeoSource>();
 			ArrayList<ScoreSource> scoreSources = new ArrayList<ScoreSource>();
 			
-			geoSources.add(new GeoSource("Surrey", new File("GeoSources/surrey_elementary")));
-			geoSources.add(new GeoSource("Vancouver", new File("GeoSources/vancouver_elementary")));
+			geoSources.add(new GeoSource("Surrey", new File("GeoSources/surrey_elementary.json")));
+			geoSources.add(new GeoSource("Vancouver", new File("GeoSources/vancouver_elementary.json")));
 			schoolSettings.setGeoSources(geoSources);
 		
 			ArrayList<String> scoreSourceDistrictNames = new ArrayList<String>();
@@ -79,12 +84,11 @@ public class OrchidHisser {
 	}
 
 	// Merge map sources into one file
-	public static void ConcatenateMapSources(MapSettings mapSettings) {
+	public static void ConcatenateMapSources(MapSettings mapSettings) throws JsonParseException, IOException {
 		logger.trace("Concatenating map sources.");
 		
 		// for each school in the school list, load into classes
-		SchoolJSON school = new SchoolJSON();
-		school.FromSettings(mapSettings.getSchoolSettings());
+		List<SchoolJSON> schoolJSONs = SchoolJSONFactory.FromSettings(mapSettings.getSchoolSettings());
 	}
 
 	// make tiles from dataset
