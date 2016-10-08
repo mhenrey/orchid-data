@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonParseException;
 
+import geoData.Feature;
 import geoData.SchoolJSON;
 import geoData.SchoolJSONFactory;
 
@@ -87,8 +88,28 @@ public class OrchidHisser {
 	public static void ConcatenateMapSources(MapSettings mapSettings) throws JsonParseException, IOException {
 		logger.trace("Concatenating map sources.");
 		
-		// for each school in the school list, load into classes
+		// for each source file, load it into classes
 		List<SchoolJSON> schoolJSONs = SchoolJSONFactory.FromSettings(mapSettings.getSchoolSettings());
+		
+		// create a new JSON collection that will contain information from all source files
+		SchoolJSON concatenatedJSON = new SchoolJSON();
+		
+		// populate the heading information from the first JSON file element
+		concatenatedJSON.setCrs(schoolJSONs.get(0).getCrs());
+		concatenatedJSON.setName("Elementary Schools");
+		concatenatedJSON.setType(schoolJSONs.get(0).getType());
+
+		// populate the features list with all elements from all JSON sources
+		ArrayList<Feature> concatenatedFeatureList = new ArrayList<Feature>();
+		for (SchoolJSON schoolJSON: schoolJSONs){
+			for (Feature feature:schoolJSON.getFeatures()){
+				concatenatedFeatureList.add(feature);
+			}
+		}
+		concatenatedJSON.setFeatures(concatenatedFeatureList);
+		
+		
+		logger.trace(concatenatedJSON);
 	}
 
 	// make tiles from dataset

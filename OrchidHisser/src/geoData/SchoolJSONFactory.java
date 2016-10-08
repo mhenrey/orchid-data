@@ -30,17 +30,19 @@ public class SchoolJSONFactory {
 	
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static List<SchoolJSON> FromSettings(SchoolSettings schoolSettings) throws JsonParseException, IOException {
+
+		List<SchoolJSON> schoolJSONs = new ArrayList<SchoolJSON>();
+		
 		// go through each school in the settings and load it
 		List<GeoSource> geoSources = schoolSettings.getGeoSources();
-		GeoSource geoSource = geoSources.get(0);
-		File path = new File("bin/" + geoSource.getPath().toString());
-		List<SchoolJSON> schoolJSONs = new ArrayList<SchoolJSON>();
-		if (path.exists()){
-			ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
-			SchoolJSON schoolJSON = mapper.readValue(path, SchoolJSON.class);
-			schoolJSONs.add(schoolJSON);
+		for (GeoSource geoSource: geoSources) {
+			File path = new File("bin/" + geoSource.getPath().toString());		
+			if (path.exists()){
+				ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+				SchoolJSON schoolJSON = mapper.readValue(path, SchoolJSON.class);
+				schoolJSONs.add(schoolJSON);
+			}
 		}
-		
 		return schoolJSONs;
 	}
 }
