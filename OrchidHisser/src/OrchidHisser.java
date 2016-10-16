@@ -1,5 +1,7 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import settings.ScoreSource;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import geoData.Feature;
 import geoData.SchoolJSON;
@@ -33,10 +36,14 @@ public class OrchidHisser {
 		boolean startupMode = false;
 		MapSettings mapSettings = LoadSettings(startupMode);
 		
-		DownloadMapSources();
-		ConcatenateMapSources(mapSettings);
-		MakeTiles();
-		CorrelateScoresWithSchools();
+		downloadMapSources();
+		SchoolJSON concatenatedElementarySchoolJSON = concatenateMapSources(mapSettings);
+		concatenatedElementarySchoolJSON.convertCRS();
+
+		correlateScoresWithSchools();
+		
+		makeTiles();
+
 	}
 
 	/**
@@ -80,24 +87,24 @@ public class OrchidHisser {
 	}
 
 	// Download maps from online
-	public static void DownloadMapSources() {
+	public static void downloadMapSources() {
 		logger.trace("Downloading map sources.");
 	}
 
 	// Merge map sources into one file
-	public static void ConcatenateMapSources(MapSettings mapSettings) throws JsonParseException, IOException {
+	public static SchoolJSON concatenateMapSources(MapSettings mapSettings) throws JsonParseException, IOException {
 		logger.trace("Concatenating map sources.");
 		
 		// for each source file, load it into classes
 		List<SchoolJSON> schoolJSONs = SchoolJSONFactory.FromSettings(mapSettings.getSchoolSettings());
 		
 		// create a new JSON collection that will contain information from all source files
-		SchoolJSON concatenatedJSON = new SchoolJSON();
+		SchoolJSON concatenatedElementaryJSON = new SchoolJSON();
 		
 		// populate the heading information from the first JSON file element
-		concatenatedJSON.setCrs(schoolJSONs.get(0).getCrs());
-		concatenatedJSON.setName("Elementary Schools");
-		concatenatedJSON.setType(schoolJSONs.get(0).getType());
+		concatenatedElementaryJSON.setCrs(schoolJSONs.get(0).getCrs());
+		concatenatedElementaryJSON.setName("Elementary Schools");
+		concatenatedElementaryJSON.setType(schoolJSONs.get(0).getType());
 
 		// populate the features list with all elements from all JSON sources
 		ArrayList<Feature> concatenatedFeatureList = new ArrayList<Feature>();
@@ -106,20 +113,53 @@ public class OrchidHisser {
 				concatenatedFeatureList.add(feature);
 			}
 		}
-		concatenatedJSON.setFeatures(concatenatedFeatureList);
+		concatenatedElementaryJSON.setFeatures(concatenatedFeatureList);
 		
+		// write the json to file
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(new File("bin/GeoSources/concatenated_elementary.json"), concatenatedElementaryJSON);
 		
-		logger.trace(concatenatedJSON);
+		return concatenatedElementaryJSON;
 	}
 
 	// make tiles from dataset
-	public static void MakeTiles() {
-		logger.trace("Generating tiles.");
+	public static void makeTiles() {
+		logger.trace("Generating tiles. First converting projection.");
+		executeCommand("/usr/local/Cellar/gdal/1.11.5/bin/ogr2ogr -t_srs WGS84 -f geoJSON bin/GeoSources/converted_elementary.json bin/GeoSources/concatenated_elementary.json");
+		logger.trace("Now making .mbtiles file.");
+		executeCommand("/usr/local/Cellar/tippecanoe/1.13.0/bin/tippecanoe -o bin/GeoSources/concatenated_elementary.mbtiles bin/GeoSources/converted_elementary.json -f");		
+	}
+	
+	// from https://www.mkyong.com/java/how-to-execute-shell-command-from-java/
+	private static String executeCommand(String command) {
+
+		StringBuffer output = new StringBuffer();
+
+		Process p;
+		try {
+			p = Runtime.getRuntime().exec(command);
+			p.waitFor();
+			BufferedReader reader =
+                            new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+                        String line = "";
+			while ((line = reader.readLine())!= null) {
+				output.append(line + "\n");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return output.toString();
+
 	}
 
 	// correlate school scores with the schools
-	public static void CorrelateScoresWithSchools() {
+	public static void correlateScoresWithSchools() {
 		logger.trace("Correlating data.");
+		
+		
 	}
 
 }

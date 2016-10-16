@@ -70,5 +70,12 @@ public class SchoolJSON {
 	public void setFeatures(List<Feature> features) {
 		this.features = features;
 	}
+	/**
+	 * 
+	 */
+	public void convertCRS() {
+		
+		
+	}
 	
 }
