@@ -4,9 +4,11 @@
 package geoData;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import orchidHisser.OrchidHisser;
 
@@ -176,6 +181,60 @@ public class SchoolJSON {
 	 */
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	// from https://www.mkyong.com/java/how-to-execute-shell-command-from-java/
+		private static String executeCommand(String command) {
+
+			StringBuffer output = new StringBuffer();
+
+			Process p;
+			try {
+				p = Runtime.getRuntime().exec(command);
+				p.waitFor();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+				String line = "";
+				while ((line = reader.readLine()) != null) {
+					output.append(line + "\n");
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return output.toString();
+
+		}
+	/**
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
+	 * 
+	 */
+	public static SchoolJSON convertProjectionToWGS84(SchoolJSON originalSchoolJSON) throws JsonGenerationException, JsonMappingException, IOException {
+		// serialize to temp file
+		ObjectMapper mapper = new ObjectMapper();
+		try{
+			File tempFilePath = new File("bin/temp/schoolJSON.json");
+			tempFilePath.createNewFile();
+			mapper.writeValue(tempFilePath, originalSchoolJSON);
+		}
+		catch (IOException e){
+			logger.trace("Could not serialize.");
+			return null;
+		}
+		catch (SecurityException e){
+			logger.trace("Could not open file.");
+			return null;
+		}
+		// call command to convert
+		logger.trace("Generating converted projection.");
+		executeCommand(
+				"/usr/local/Cellar/gdal/1.11.5/bin/ogr2ogr -t_srs WGS84 -f geoJSON bin/temp/converted_schoolJSON.json bin/temp/schoolJSON.json");
+		// deserialize
+		SchoolJSON newSchoolJSON = mapper.readValue(new File("bin/temp/converted_schoolJSON.json"), SchoolJSON.class);
+		return newSchoolJSON;
 	}
 
 }

@@ -33,12 +33,10 @@ public class OrchidHisser {
 	// Logger instance named "OrchidHisser".
 	private static final Logger logger = LogManager.getLogger(OrchidHisser.class);
 
+	
 	// Merge map sources into one file
-	public static SchoolJSON concatenateMapSources(MapSettings mapSettings) throws JsonParseException, IOException {
+	public static SchoolJSON concatenateMapSources(List<SchoolJSON> schoolJSONs) throws JsonParseException, IOException {
 		logger.trace("Concatenating map sources.");
-
-		// for each source file, load it into classes
-		List<SchoolJSON> schoolJSONs = SchoolJSONFactory.FromSettings(mapSettings.getSchoolSettings());
 
 		// create a new JSON collection that will contain information from all
 		// source files
@@ -62,8 +60,10 @@ public class OrchidHisser {
 	}
 
 	// Download maps from online
-	public static void downloadMapSources() {
+	public static List<SchoolJSON> downloadMapSources(MapSettings mapSettings) throws JsonParseException, IOException {
 		logger.trace("Downloading map sources.");
+		// for each source file, load it into classes
+		return SchoolJSONFactory.FromSettings(mapSettings.getSchoolSettings());
 	}
 
 	// from https://www.mkyong.com/java/how-to-execute-shell-command-from-java/
@@ -137,15 +137,23 @@ public class OrchidHisser {
 		boolean startupMode = false;
 		MapSettings mapSettings = LoadSettings(startupMode);
 
-		downloadMapSources();
-		SchoolJSON concatenatedElementarySchoolJSON = concatenateMapSources(mapSettings);
-		concatenatedElementarySchoolJSON.convertCRS();
+		// obtain all the school information
+		List<SchoolJSON> schoolJSONs = downloadMapSources(mapSettings);
+		
+		// convert all the projctions to the standard
+		for (SchoolJSON elementarySchool:schoolJSONs){
+			elementarySchool = SchoolJSON.convertProjectionToWGS84(elementarySchool);
+		}
+		
+		// merge into one file
+		SchoolJSON concatenatedElementarySchoolJSON = concatenateMapSources(schoolJSONs);
 
+		// merge with the score information
 		String csvFile = "bin/ScoreSources/Fraser2015.csv";
 		concatenatedElementarySchoolJSON.correlateScoresWithSchools(csvFile);
 
+		// make into mapbox tiles
 		makeTiles(concatenatedElementarySchoolJSON);
-
 	}
 
 	// make tiles from dataset
