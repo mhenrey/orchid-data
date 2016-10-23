@@ -184,54 +184,52 @@ public class SchoolJSON {
 	}
 
 	// from https://www.mkyong.com/java/how-to-execute-shell-command-from-java/
-		private static String executeCommand(String command) {
+	private static String executeCommand(String command) {
 
-			StringBuffer output = new StringBuffer();
+		StringBuffer output = new StringBuffer();
 
-			Process p;
-			try {
-				p = Runtime.getRuntime().exec(command);
-				p.waitFor();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		Process p;
+		try {
+			p = Runtime.getRuntime().exec(command);
+			p.waitFor();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-				String line = "";
-				while ((line = reader.readLine()) != null) {
-					output.append(line + "\n");
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
+			String line = "";
+			while ((line = reader.readLine()) != null) {
+				output.append(line + "\n");
 			}
 
-			return output.toString();
-
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
+		return output.toString();
+
+	}
+
 	/**
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonGenerationException 
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
 	 * 
 	 */
-	public static SchoolJSON convertProjectionToWGS84(SchoolJSON originalSchoolJSON) throws JsonGenerationException, JsonMappingException, IOException {
+	public static SchoolJSON convertProjectionToWGS84(SchoolJSON originalSchoolJSON)
+			throws JsonGenerationException, JsonMappingException, IOException {
 		// serialize to temp file
 		ObjectMapper mapper = new ObjectMapper();
-		try{
-			File tempFilePath = new File("bin/temp/schoolJSON.json");
-			tempFilePath.createNewFile();
-			mapper.writeValue(tempFilePath, originalSchoolJSON);
-		}
-		catch (IOException e){
-			logger.trace("Could not serialize.");
-		}
-		catch (SecurityException e){
-			logger.trace("Could not open file.");
-		}
+
+		File tempOriginalFilePath = new File("bin/temp/schoolJSON.json");
+		tempOriginalFilePath.delete();
+		tempOriginalFilePath.createNewFile();
+		mapper.writeValue(tempOriginalFilePath, originalSchoolJSON);
+
 		// call command to convert
 		logger.trace("Generating converted projection.");
-		executeCommand(
-				"/usr/local/Cellar/gdal/1.11.5/bin/ogr2ogr -t_srs WGS84 -f geoJSON bin/temp/converted_schoolJSON.json bin/temp/schoolJSON.json");
+		File tempConvertedFilePath = new File("bin/temp/converted_schoolJSON.json");
+		tempConvertedFilePath.delete();
+		executeCommand("/usr/local/Cellar/gdal/1.11.5/bin/ogr2ogr -t_srs WGS84 -f geoJSON bin/temp/converted_schoolJSON.json bin/temp/schoolJSON.json");
 		// deserialize
-		return mapper.readValue(new File("bin/temp/converted_schoolJSON.json"), SchoolJSON.class);
+		return mapper.readValue(tempConvertedFilePath, SchoolJSON.class);
 	}
 
 }

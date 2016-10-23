@@ -142,10 +142,11 @@ public class OrchidHisser {
 		// obtain all the school information
 		List<SchoolJSON> schoolJSONs = downloadMapSources(mapSettings);
 		
-		// convert all the projctions to the standard
+		// convert all the projections to the standard
 		ListIterator<SchoolJSON> schoolJSONIterator = schoolJSONs.listIterator();
 		while (schoolJSONIterator.hasNext()) {
-			schoolJSONIterator.set(SchoolJSON.convertProjectionToWGS84(schoolJSONIterator.next()));
+			SchoolJSON element = schoolJSONIterator.next();
+			schoolJSONIterator.set(SchoolJSON.convertProjectionToWGS84(element));
 		}
 		
 		// merge into one file
@@ -155,7 +156,7 @@ public class OrchidHisser {
 		String csvFile = "bin/ScoreSources/Fraser2015.csv";
 		concatenatedElementarySchoolJSON.correlateScoresWithSchools(csvFile);
 
-		// make into mapbox tiles
+		// make into MapBox tiles
 		makeTiles(concatenatedElementarySchoolJSON);
 	}
 
