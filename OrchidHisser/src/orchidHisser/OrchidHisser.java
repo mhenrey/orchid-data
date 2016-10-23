@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import settings.GeoSource;
 import settings.MapSettings;
@@ -141,8 +143,9 @@ public class OrchidHisser {
 		List<SchoolJSON> schoolJSONs = downloadMapSources(mapSettings);
 		
 		// convert all the projctions to the standard
-		for (SchoolJSON elementarySchool:schoolJSONs){
-			elementarySchool = SchoolJSON.convertProjectionToWGS84(elementarySchool);
+		ListIterator<SchoolJSON> schoolJSONIterator = schoolJSONs.listIterator();
+		while (schoolJSONIterator.hasNext()) {
+			schoolJSONIterator.set(SchoolJSON.convertProjectionToWGS84(schoolJSONIterator.next()));
 		}
 		
 		// merge into one file
@@ -165,12 +168,9 @@ public class OrchidHisser {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.writeValue(new File("bin/GeoSources/concatenated_elementary.json"), concatenatedElementaryJSON);
 
-		logger.trace("Generating converted projection.");
-		executeCommand(
-				"/usr/local/Cellar/gdal/1.11.5/bin/ogr2ogr -t_srs WGS84 -f geoJSON bin/GeoSources/converted_elementary.json bin/GeoSources/concatenated_elementary.json");
 		logger.trace("Now making .mbtiles file.");
 		executeCommand(
-				"/usr/local/Cellar/tippecanoe/1.13.0/bin/tippecanoe -o bin/GeoSources/concatenated_elementary.mbtiles bin/GeoSources/converted_elementary.json -f");
+				"/usr/local/Cellar/tippecanoe/1.13.0/bin/tippecanoe -o bin/GeoSources/concatenated_elementary.mbtiles bin/GeoSources/concatenated_elementary.json -f");
 	}
 
 }

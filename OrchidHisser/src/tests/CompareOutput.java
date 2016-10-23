@@ -30,13 +30,9 @@ public class CompareOutput {
 			fail("Exception generated during operation.");
 		}
 
-		try {
-			File file1 = new File("bin/GeoSources/converted_elementary.json");
-			File file2 = new File("bin/tests/converted_elementary.json");
-			assertTrue("The files differ!", FileUtils.contentEquals(file1, file2));
-			
-			file1 = new File("bin/GeoSources/concatenated_elementary.json");
-			file2 = new File("bin/tests/concatenated_elementary.json");
+		try {		
+			File file1 = new File("bin/GeoSources/concatenated_elementary.json");
+			File file2 = new File("bin/tests/concatenated_elementary.json");
 			assertTrue("The files differ!", FileUtils.contentEquals(file1, file2));
 		} catch (IOException e) {
 			fail("Exception generated when comparing files.");

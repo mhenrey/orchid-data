@@ -222,19 +222,16 @@ public class SchoolJSON {
 		}
 		catch (IOException e){
 			logger.trace("Could not serialize.");
-			return null;
 		}
 		catch (SecurityException e){
 			logger.trace("Could not open file.");
-			return null;
 		}
 		// call command to convert
 		logger.trace("Generating converted projection.");
 		executeCommand(
 				"/usr/local/Cellar/gdal/1.11.5/bin/ogr2ogr -t_srs WGS84 -f geoJSON bin/temp/converted_schoolJSON.json bin/temp/schoolJSON.json");
 		// deserialize
-		SchoolJSON newSchoolJSON = mapper.readValue(new File("bin/temp/converted_schoolJSON.json"), SchoolJSON.class);
-		return newSchoolJSON;
+		return mapper.readValue(new File("bin/temp/converted_schoolJSON.json"), SchoolJSON.class);
 	}
 
 }
