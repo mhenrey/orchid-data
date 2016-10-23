@@ -7,5 +7,8 @@
 	<classpathentry kind="lib" path="/Users/mike 1/git/orchid-data/OrchidHisser/jackson-core-2.8.3.jar"/>
 	<classpathentry kind="lib" path="/Users/mike 1/git/orchid-data/OrchidHisser/jackson-databind-2.8.3.jar"/>
 	<classpathentry kind="lib" path="/Users/mike 1/git/orchid-data/OrchidHisser/jackson-annotations-2.8.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/Users/mike 1/git/orchid-data/OrchidHisser/commons-io-2.5/commons-io-2.5-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/mike 1/git/orchid-data/OrchidHisser/commons-io-2.5/commons-io-2.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
